@@ -1,0 +1,13 @@
+vendor/*
+/NotORM.zip
+/delete_test.php
+/insert_test.php
+/WritingARESTfulWebServiceWithSlim-master.zip
+/readme.txt
+/composer.json
+/.htaccess
+/README
+/composer.lock
+/update_test.php
+/sql/
+/tests/
