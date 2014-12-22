@@ -1,8 +1,9 @@
 <?php
+// remote connection test
 //require_once "../vendor/autoload.php";
 
-
-
+                
+  
 require "Slim/Slim.php";
  
 // create new Slim instance
@@ -10,7 +11,7 @@ $app = new Slim();
 
 require "NotORM.php";
  
-
+                
 $dsn = "mysql:dbname=ecoman_18_08;host=localhost";
 $username = "root";
 $password = "";
@@ -1489,7 +1490,7 @@ $app->get("/companies_json_test2", function () use ($app, $db, $pdo) {
                                 width: 500,
                                 height: 'auto',
                                 border: false,
-                                href: 'tooltip_ajax.php?id=".$company["cmpny_id"]."&col=".$value['column_name']."'
+                                href: 'tooltip_ajax?id=".$company["cmpny_id"]."&col=".$value['column_name']."'
                             });
                         }
 
