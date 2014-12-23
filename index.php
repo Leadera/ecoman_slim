@@ -1491,7 +1491,7 @@ $app->get("/companies_json_test2", function () use ($app, $db, $pdo) {
                                 width: 500,
                                 height: 'auto',
                                 border: false,
-                                href: 'tooltip_ajax?id=".$company["cmpny_id"]."&col=".$value['column_name']."'
+                                href: 'isscopingtooltip?id=".$company["cmpny_id"]."&col=".$value['column_name']."'
                             });
                         }
 
@@ -2235,6 +2235,26 @@ $app->get("/ISScenarios", function () use ($app, $db, $pdo) {
             "prj_name" => $flow["prj_name"],
             "syn_name" => $flow["syn_name"],
             "date" => $flow["date"],
+            "detail" => " <a href='#' id='".$flow["prj_id"]."_1_".$flow['synergy_id']."' class='easyui-tooltip'  >Scenario Details</a>
+                        <script>$('#".$flow["prj_id"]."_1_".$flow['synergy_id']."').tooltip({
+                        position: 'right',
+                        content: $('<div></div>'),
+                        //content: '<span style=\"color:#fff\">This is the tooltip message.</span>',
+                        onShow: function(){
+
+                            $(this).tooltip('arrow').css('top', 20);
+                            $(this).tooltip('tip').css('top', $(this).offset().top);
+                        },
+                        onUpdate: function(cc){
+                            cc.panel({
+                                width: 500,
+                                height: 'auto',
+                                border: false,
+                                href: 'isscopingtooltipscenarios?id=".$flow["prj_id"]."'
+                            });
+                        }
+
+                    });</script>  "
         );
     }
 
@@ -2245,6 +2265,81 @@ $app->get("/ISScenarios", function () use ($app, $db, $pdo) {
     
 });
 
+
+
+
+/**
+ * zeynel dağlı
+ * @since 23-12-2014
+ */
+$app->get("/isScenarioDetail_json_test", function () use ($app, $db, $pdo) {
+
+    if(isset($_GET['id']) && $_GET['id']!="" ) {
+        $companyID = intval($_GET['id']);
+    } 
+    
+    /*print_r("SELECT 
+                            prj.name AS prj_name,
+                            sm.id as id,
+                            f.name as from_company,
+                            f2.name as to_company,
+                            u.name as unit,
+                            sm.from_quantity as from_quantity,
+                            sm.to_quantity as to_quantity,
+                            fl.name AS flow_name
+                            FROM t_is_prj_details AS sm
+                            LEFT JOIN t_is_prj AS prj ON prj.id = sm.is_prj_id
+                            LEFT JOIN t_cmpny f on sm.cmpny_from_id = f.id
+                            LEFT JOIN t_cmpny f2 on sm.cmpny_to_id = f2.id
+                            LEFT JOIN t_flow fl on sm.flow_id = fl.id
+                            LEFT JOIN t_unit u on sm.unit_id = u.id
+                            WHERE sm.is_prj_id=".$companyID.";");*/
+    $res = $pdo->query("SELECT 
+                            prj.name AS prj_name,
+                            sm.id as id,
+                            f.name as from_company,
+                            f2.name as to_company,
+                            u.name as unit,
+                            sm.from_quantity as from_quantity,
+                            sm.to_quantity as to_quantity,
+                            fl.name AS flow_name
+                            FROM t_is_prj_details AS sm
+                            LEFT JOIN t_is_prj AS prj ON prj.id = sm.is_prj_id
+                            LEFT JOIN t_cmpny f on sm.cmpny_from_id = f.id
+                            LEFT JOIN t_cmpny f2 on sm.cmpny_to_id = f2.id
+                            LEFT JOIN t_flow fl on sm.flow_id = fl.id
+                            LEFT JOIN t_unit u on sm.unit_id = u.id
+                            WHERE sm.is_prj_id=".$companyID.";
+ ")->fetchAll(PDO::FETCH_ASSOC);
+                            //ORDER BY  ".$order." ".$sort." LIMIT ".$offset.",".$limit."
+    
+
+    $eqpmntStr = null;
+    if(!empty($res) ) {
+        $eqpmntStr.="<p  style=\"font-size:14px\">".$res[0]["prj_name"]." Scenario Details</p>";
+        foreach ($res as $flow){
+            $eqpmntStr.="<ul>";
+            
+            $eqpmntStr.="<li>Flow->".$flow["flow_name"]."</li>";
+            $eqpmntStr.="<li>From Quantity->".$flow["from_quantity"]."</li>";
+            $eqpmntStr.="<li>To Quantity->".$flow["to_quantity"]."</li>";
+            $eqpmntStr.="<li>Unit->".$flow["unit"]."</li>";
+            $eqpmntStr.="<li>From Company->".$flow["from_company"]."</li>";
+            $eqpmntStr.="<li>To Company->".$flow["to_company"]."</li>";
+            $eqpmntStr.="</ul>";
+        }
+    } else {
+        $eqpmntStr.="<ul>";
+            
+            $eqpmntStr.="<li>No Scenario Detail</li>";
+            $eqpmntStr.="</ul>";
+    }
+    
+    $app->response()->header("Content-Type", "application/html");    
+    echo $eqpmntStr;
+    //echo json_encode($resultArray);
+    
+});
 
 
 
