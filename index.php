@@ -39,6 +39,7 @@ $app = new Slim(array(
     "TEMPLATES.PATH" => "./templates"
 ));
 
+
 $app->get("/", function() {
     echo "<h1>Hello Slim World</h1>";
 });
@@ -1510,11 +1511,15 @@ $app->get("/companies_json_test2", function () use ($app, $db, $pdo) {
       $companies[] = $company_details;
     }
 
-    $app->response()->header("Content-Type", "application/json");
+    $app->response()->header("Content-Type", "application/html");
     
     $resultArray = array();
     $resultArray['total'] = $res2[0]['toplam'];
     $resultArray['rows'] = $companies;
+    //echo "COOKİE--->".$_COOKIE["username"];
+    //$cookieArray = unserialize($_COOKIE["ci_session"]);
+    //print_r($cookieArray) ;
+    //print_r($cookieArray["user_in"]) ;
     echo json_encode($resultArray);
     
 });
