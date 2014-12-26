@@ -102,14 +102,15 @@ $app->get("/companies_json_test2", function () use ($app, $pdo) {
     }
     
     $sorguStr=null;
-    if(isset($_GET['filterRules']) && $_GET['filterRules']!="" &&$_GET['filterRules']!= null) {
+    if(isset($_GET['filterRules']) && $_GET['filterRules']!="" && $_GET['filterRules']!= null) {
         $filterRules = trim($_GET['filterRules']);
         //print_r(json_decode($filterRules));
         $jsonFilter = json_decode($filterRules, true);
         //print_r($jsonFilter[0]->field);
         $sorguExpression = null;
         foreach ($jsonFilter as $std) {
-            switch (trim($std['op'])) {
+            if($std['value']!=null) {
+                switch (trim($std['op'])) {
                 case 'greater':
                     $sorguExpression = '>';
                     $sorguStr.=' CAST("'.$std['field'].'"->\'flow_properties\'->>\'quantity\' AS numeric)  '.$sorguExpression.''.$std['value'].' AND ';
@@ -135,10 +136,10 @@ $app->get("/companies_json_test2", function () use ($app, $pdo) {
                     $sorguExpression = '=';
                     $sorguStr.=' CAST("'.$std['field'].'"->\'flow_properties\'->>\'quantity\' AS numeric)  '.$sorguExpression.''.$std['value'].' AND ';
                     break;
-            }
-            //print_r($std->field);
-            //print_r($std);
-            
+                }
+                //print_r($std->field);
+                //print_r($std); 
+            }  
         }
         $sorguStr = rtrim($sorguStr,"AND ");
         if($sorguStr!="") $sorguStr = "WHERE ".$sorguStr;
