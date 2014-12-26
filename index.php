@@ -102,7 +102,7 @@ $app->get("/companies_json_test2", function () use ($app, $pdo) {
     }
     
     $sorguStr=null;
-    if(isset($_GET['filterRules']) && $_GET['filterRules']!="") {
+    if(isset($_GET['filterRules']) && $_GET['filterRules']!="" &&$_GET['filterRules']!= null) {
         $filterRules = trim($_GET['filterRules']);
         //print_r(json_decode($filterRules));
         $jsonFilter = json_decode($filterRules, true);
