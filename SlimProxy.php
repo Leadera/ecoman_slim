@@ -15,5 +15,5 @@ require_once 'Ecoman\EcomanProxyHelper.php';
 
 $proxyClass = new \Proxy\Slim\SlimProxyClass();
 $ecoman = new \Proxy\Ecoman\EcomanProxyHelper($proxyClass);
-$ecoman->setEndPointUrl('http://localhost/slim_2/index.php/');
+$ecoman->setEndPointUrl('http://88.249.18.205:8090/slim2_ecoman/index.php/');
 echo $ecoman->redirect();
