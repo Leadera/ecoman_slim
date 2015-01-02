@@ -28,7 +28,8 @@ class EcomanProxyHelper extends \Proxy\Proxy\AbstractProxyHelper {
                                     'flowsAndCompanies_json_test'=>'getFlowsAndCompanies',
                                     'flowCompanies_json_test'=>'getFlowCompanies',
                                     'companyFlows_json_test'=>'getCompanyFlows',
-                                    'ISScenarios'=>'getISScenarios');
+                                    'ISScenarios'=>'getISScenarios',
+                                    'ISPotentialsNew_json_test'=>'getISPotentialsNew');
 
     /**
      * constructor
@@ -71,6 +72,33 @@ class EcomanProxyHelper extends \Proxy\Proxy\AbstractProxyHelper {
     public function redirect() {
         $execFunction = $this->resolveRedirectMap();
         echo $this->$execFunction();
+    }
+    
+    /**
+     * get IS potentials by rest api call
+     * @return string JSON
+     * @author Zeynel Dağlı
+     * @version 0.0.1
+     */
+    public function getISPotentialsNew() {
+        $params = null;
+        $params = $this->proxyClass->getRequestParams();
+        $preparedParams = $this->prepareGetParams();
+        if (($ch = @curl_init()) == false) {
+            header("HTTP/1.1 500", true, 500);
+            die("Cannot initialize cUrl session. Is cUrl enabled for your PHP installation?");
+        }
+        curl_setopt($ch, CURLOPT_URL, $this->endPointUrl.$this->getEndPointFunction().'?'.$preparedParams ); //Url together with parameters
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Return data instead printing directly in Browser
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT , 7); //Timeout after 7 seconds
+        curl_setopt($ch, CURLOPT_HEADER, 0); // we don’t want also to get the header information that we receive.
+ 
+        $response = curl_exec($ch);
+        if ($response == false) {
+            die("curl_exec() failed. Error: " . curl_error($ch));
+        }
+ 
+        return $response;
     }
     
     /**
