@@ -27,7 +27,7 @@ $app->get("/flows", function () use ($app, $db) {
             $flows[]  = array(
                 "id" => $flow["id"],
                 "text" => $flow["name"],
-                "checked" => true,
+                "checked" => false,
                 "attributes" => array ("notroot"=>true)
             );
         }
@@ -45,7 +45,7 @@ $app->get("/flows", function () use ($app, $db) {
                 "id" => $flow["id"],
                 "text" => $flow["name"],
                 "state" => 'closed',
-                "checked" => true,
+                "checked" => false,
                 "attributes" => array ("notroot"=>false)
             );
         }
